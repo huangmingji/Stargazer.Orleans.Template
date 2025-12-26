@@ -11,9 +11,11 @@ public static class OrleansServerExtension
     internal static IHostBuilder ConfigureOrleansServer(this IHostBuilder builder)
     {
         var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
-            .AddEnvironmentVariables()
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
             .Build();
+        
         builder.UseOrleans(siloBuilder =>
         {
             // 配置集群选项
