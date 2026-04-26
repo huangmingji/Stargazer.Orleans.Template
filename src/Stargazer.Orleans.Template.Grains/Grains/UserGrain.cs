@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Logging;
 using Orleans.Providers;
+using Stargazer.Common.Extend;
 using Stargazer.Orleans.Template.Domain.Users;
 using Stargazer.Orleans.Template.Grains.Abstractions.Users;
 using Stargazer.Orleans.Template.Grains.Abstractions.Users.Dtos;
-using Stargazer.Orleans.Utility.Extend;
 
 namespace Stargazer.Orleans.Template.Grains.Grains;
 

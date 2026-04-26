@@ -26,7 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\aspire\Stargazer.ServiceDefaults\Stargazer.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Stargazer.Orleans.Template.Grains.Abstractions\Stargazer.Orleans.Template.Grains.Abstractions.csproj" />
-    <ProjectReference Include="..\Stargazer.Orleans.Utility\Stargazer.Orleans.Utility.csproj" />
   </ItemGroup>
 
 

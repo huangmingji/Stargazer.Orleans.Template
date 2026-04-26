@@ -9,11 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Stargazer.Orleans.Utility\Stargazer.Orleans.Utility.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="9.2.1" />
+    <PackageReference Include="Stargazer.Common" Version="10.0.5" />
   </ItemGroup>
 
 </Project>
