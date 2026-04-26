@@ -2,12 +2,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
-using Orleans.Configuration;
 using Scalar.AspNetCore;
 using Serilog;
+using Stargazer.Common.Extend;
 using Stargazer.Orleans.Template.Host;
 using Stargazer.Orleans.Template.Host.Middlewares;
-using Stargazer.Orleans.Utility.Extend;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
@@ -44,14 +43,16 @@ builder.Services.AddOpenApi(options =>
 });
 // builder.Services.UseEntityFramworkCore()
 //     .MigrateDatabase();
-builder.Services.AddControllers().AddNewtonsoftJson(
-    op =>
-    {
-        op.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
-        op.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-        op.SerializerSettings.Converters.Add(new Ext.DateTimeJsonConverter());
-        op.SerializerSettings.Converters.Add(new Ext.LongJsonConverter());
-    });
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(
+        op =>
+        {
+            op.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+            op.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            op.SerializerSettings.Converters.Add(new Ext.DateTimeJsonConverter());
+            op.SerializerSettings.Converters.Add(new Ext.LongJsonConverter());
+        })
+    .AddGlobalExceptionFilter();
 
 var app = builder.Build();
 
@@ -66,7 +67,6 @@ if (app.Environment.IsDevelopment())
     );
 }
 
-app.UseApiExceptionHandling();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.MapDefaultEndpoints();

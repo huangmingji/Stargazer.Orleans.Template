@@ -1,11 +1,10 @@
 using Microsoft.Extensions.Logging;
 using Orleans.Providers;
+using Stargazer.Common.Extend;
+using Stargazer.Common.SequentialGuid;
 using Stargazer.Orleans.Template.Domain.Users;
 using Stargazer.Orleans.Template.Grains.Abstractions.Users;
 using Stargazer.Orleans.Template.Grains.Abstractions.Users.Dtos;
-using Stargazer.Orleans.Utility.ExceptionExtensions;
-using Stargazer.Orleans.Utility.Extend;
-using Stargazer.Orleans.Utility.SequentialGuid;
 
 namespace Stargazer.Orleans.Template.Grains.Grains;
 
@@ -47,12 +46,12 @@ public class AccountGrain([PersistentState("state", "Default")] IPersistentState
         logger.LogInformation(state.State.SerializeObject());
         if (state.State.Id.IsEmpty())
         {
-            throw new VerifyPasswordErrorException("Account not found");
+            throw new KeyNotFoundException("Account not found");
         }
 
         if (state.State.Password != input.Password)
         {
-            throw new VerifyPasswordErrorException("Password error");
+            throw new UnauthorizedAccessException("Password error");
         }
     }
 
