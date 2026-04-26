@@ -1,0 +1,9 @@
+{
+  "account_not_found": "账户不存在",
+  "bad_request": "参数错误",
+  "unauthorized": "认证失败",
+  "forbidden": "权限不足",
+  "not_found": "资源不存在",
+  "conflict": "数据冲突",
+  "internal_error": "服务器内部错误"
+}

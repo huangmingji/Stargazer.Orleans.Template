@@ -78,7 +78,25 @@ Host 默认监听 `http://localhost:5000`，Silo 默认监听 `11111` 端口。
 通过 `GlobalExceptionFilter` 统一处理异常，返回格式:
 
 ```json
-{ "code": 404, "message": "资源不存在" }
+{ "code": "account_not_found", "message": "账户不存在" }
+```
+
+Exception 的 `Message` 作为 code key，从多语言文件获取对应语言的 message。
+
+### 使用示例
+
+```csharp
+throw new ArgumentException("account_not_found");     // 400, message 从资源文件获取
+throw new LocalizedException.NotFound("account_not_found"); // 推荐写法
+throw new LocalizedException.BadRequest("invalid_param");   // 400
+```
+
+### 推荐用法 (LocalizedException)
+
+```csharp
+throw LocalizedException.NotFound("account_not_found");   // 404
+throw LocalizedException.BadRequest("invalid_param");     // 400
+throw LocalizedException.Conflict("duplicate_user");    // 409
 ```
 
 | 异常类型 | Code | 说明 |
@@ -96,7 +114,19 @@ Host 默认监听 `http://localhost:5000`，Silo 默认监听 `11111` 端口。
 throw new ArgumentException("参数无效");           // 400
 throw new UnauthorizedAccessException("登录失败"); // 401
 throw new InvalidOperationException("无权限");   // 403
-throw new KeyNotFoundException("用户不存在");    // 409
+throw new KeyNotFoundException("用户不存在");    // 404
 throw new InvalidCastException("数据类型不匹配");    // 409
 throw new Exception("系统错误");             // 500
+```
+
+### 多语言支持
+
+资源文件:
+- `Resources/Strings.zh-CN.json` - 中文
+- `Resources/Strings.en.json` - 英文
+
+示例:
+```
+GET /api/users/999              → { "code": "account_not_found", "message": "账户不存在" }
+GET /api/users/999?lang=en       → { "code": "account_not_found", "message": "Account not found" }
 ```

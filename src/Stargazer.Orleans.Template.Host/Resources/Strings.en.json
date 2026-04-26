@@ -1,0 +1,9 @@
+{
+  "account_not_found": "Account not found",
+  "bad_request": "Bad Request",
+  "unauthorized": "Unauthorized",
+  "forbidden": "Forbidden",
+  "not_found": "Not Found",
+  "conflict": "Conflict",
+  "internal_error": "Internal Server Error"
+}

@@ -1,32 +1,50 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Stargazer.Orleans.Template.Domain.Share.Resources;
+using Stargazer.Orleans.Template.Host.Resources;
 
 namespace Stargazer.Orleans.Template.Host.Middlewares;
 
-public class GlobalExceptionFilter : IExceptionFilter
+public class GlobalExceptionFilter(IHostEnvironment env, LocalizationService localization) : IExceptionFilter
 {
-    private readonly IHostEnvironment _env;
-
-    public GlobalExceptionFilter(IHostEnvironment env)
-    {
-        _env = env;
-    }
-
     public void OnException(ExceptionContext context)
     {
-        var response = HandleUnknownException(context.Exception);
+        var ex = context.Exception;
+        var code = GetCode(ex);
+        var httpStatusCode = GetHttpStatusCode(ex);
+        var language = localization.GetCurrentLanguage(context.HttpContext);
+        var message = localization.GetMessage(code, language);
+
+        var response = new ErrorResponse
+        {
+            Code = code,
+            Message = message
+        };
 
         context.Result = new ObjectResult(response)
         {
-            StatusCode = response.Code,
+            StatusCode = httpStatusCode,
             DeclaredType = typeof(ErrorResponse)
         };
         context.ExceptionHandled = true;
     }
 
-    private ErrorResponse HandleUnknownException(Exception ex)
+    private static string GetCode(Exception ex)
     {
-        var code = ex switch
+        if (ex is LocalizedException localized)
+        {
+            return localized.Code;
+        }
+        return ex.Message;
+    }
+
+    private static int GetHttpStatusCode(Exception ex)
+    {
+        if (ex is LocalizedException localized)
+        {
+            return localized.HttpStatusCode;
+        }
+        return ex switch
         {
             ArgumentException => 400,
             UnauthorizedAccessException => 401,
@@ -34,12 +52,6 @@ public class GlobalExceptionFilter : IExceptionFilter
             KeyNotFoundException => 404,
             InvalidCastException => 409,
             _ => 500
-        };
-
-        return new ErrorResponse
-        {
-            Code = code,
-            Message = code == 500 && !_env.IsDevelopment() ? "服务器内部错误" : ex.Message
         };
     }
 }

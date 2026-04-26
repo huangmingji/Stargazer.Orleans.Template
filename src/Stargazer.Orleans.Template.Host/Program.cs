@@ -5,8 +5,10 @@ using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 using Serilog;
 using Stargazer.Common.Extend;
+using Stargazer.Orleans.Template.Domain.Share.Resources;
 using Stargazer.Orleans.Template.Host;
 using Stargazer.Orleans.Template.Host.Middlewares;
+using Stargazer.Orleans.Template.Host.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
@@ -43,6 +45,8 @@ builder.Services.AddOpenApi(options =>
 });
 // builder.Services.UseEntityFramworkCore()
 //     .MigrateDatabase();
+builder.Services.AddSingleton<LocalizationService>();
+
 builder.Services.AddControllers()
     .AddNewtonsoftJson(
         op =>

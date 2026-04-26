@@ -2,6 +2,6 @@ namespace Stargazer.Orleans.Template.Host.Middlewares;
 
 public class ErrorResponse
 {
-    public int Code { get; set; }
+    public string Code { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;
 }
